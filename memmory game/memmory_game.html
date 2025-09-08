@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Game</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            background-color: #f0f0f0;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        .board {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr); /* Increased to 8 columns for longer rows */
+            width: 100%; /* Set the width of the board to 100% */
+            max-width: 1200px; /* You can set a max width for appearance */
+            gap: 10px;
+            padding: 10px; /* Added padding for better spacing */
+        }
+        .card {
+            height: 100px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            cursor: pointer;
+            user-select: none;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .card:hover {
+            transform: scale(1.05);
+        }
+        #message {
+            margin-top: 20px;
+            font-size: 24px;
+            color: #333;
+        }
+        #newGameButton {
+            display: none;
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #008cba;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        #newGameButton:hover {
+            background-color: #005f75;
+            transform: scale(1.05);
+        }
+        #newGameButton:focus {
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Memory Game</h1>
+    <div class="board" id="board"></div>
+    <div id="message"></div>
+    <button id="newGameButton">New Game</button>
+    <script>
+        const symbols = ['😀', '😁', '😂', '😍', '😜', '😎', '🤪', '😇', 
+                         '😃', '😄', '😅', '😻', '🤩', '😏', '😋', '😌', 
+                         '😊', '😣', '😆', '😈']; // 20 smiley emojis
+        let cardValues = [...symbols, ...symbols];
+        let firstCard = null;
+        let secondCard = null;
+        let lockBoard = false;
+        let matchedCardsCount = 0;
+
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function createBoard() {
+            const board = document.getElementById('board');
+            shuffle(cardValues).forEach(value => {
+                const card = document.createElement('div');
+                card.classList.add('card');
+                card.setAttribute('data-value', value);
+                card.addEventListener('click', flipCard);
+                board.appendChild(card);
+            });
+        }
+
+        function flipCard() {
+            if (lockBoard || this === firstCard) return;
+
+            this.textContent = this.getAttribute('data-value');
+            this.classList.add('flipped');
+
+            if (!firstCard) {
+                firstCard = this;
+                return;
+            }
+
+            secondCard = this;
+            lockBoard = true;
+
+            checkForMatch();
+        }
+
+        function checkForMatch() {
+            if (firstCard.getAttribute('data-value') === secondCard.getAttribute('data-value')) {
+                setTimeout(() => {
+                    removeMatchedCards(firstCard, secondCard);
+                }, 1000);
+            } else {
+                setTimeout(() => {
+                    unflipCards(firstCard, secondCard);
+                }, 1000);
+            }
+        }
+
+        function removeMatchedCards(card1, card2) {
+            card1.remove();
+            card2.remove();
+            matchedCardsCount += 2;
+
+            if (matchedCardsCount === cardValues.length) {
+                gameOver();
+            }
+
+            resetBoard();
+        }
+
+        function unflipCards(card1, card2) {
+            card1.textContent = '';
+            card2.textContent = '';
+            resetBoard();
+        }
+
+        function resetBoard() {
+            [firstCard, secondCard, lockBoard] = [null, null, false];
+        }
+
+        function gameOver() {
+            const message = document.getElementById('message');
+            message.textContent = 'Congratulations! You found all pairs!';
+            document.getElementById('newGameButton').style.display = 'block';
+        }
+
+        function resetGame() {
+            matchedCardsCount = 0;
+            cardValues = [...symbols, ...symbols];
+            document.getElementById('board').innerHTML = '';
+            document.getElementById('message').textContent = '';
+            document.getElementById('newGameButton').style.display = 'none';
+            createBoard();
+        }
+
+        document.getElementById('newGameButton').addEventListener('click', resetGame);
+
+        createBoard();
+    </script>
+</body>
+</html>
