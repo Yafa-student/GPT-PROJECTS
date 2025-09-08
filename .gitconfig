@@ -1,0 +1,7 @@
+[http]
+	sslVerify = false
+[user]
+	name = Yafa-student
+	email = hand3e9+new@mbj.comp.il
+[core]
+	autocrlf = true
