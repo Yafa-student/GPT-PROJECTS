@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hangman Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #eaeaea;
+            margin: 0;
+            padding: 20px;
+        }
+        #hangmanImage {
+            width: 250px;
+            height: 250px;
+            margin: 20px 0;
+        }
+        #wordDisplay {
+            font-size: 36px;
+            margin: 20px;
+            letter-spacing: 5px;
+        }
+        #guessForm {
+            margin: 20px;
+        }
+        input[type="text"] {
+            font-size: 24px;
+            padding: 10px;
+            width: 50px;
+            text-align: center;
+        }
+        button {
+            font-size: 24px;
+            padding: 10px 20px;
+            margin-left: 10px;
+        }
+        #message {
+            margin-top: 20px;
+            font-size: 24px;
+            color: red;
+        }
+        #wrongLetters {
+            font-size: 20px;
+            margin-top: 20px;
+            color: blue;
+        }
+        #guessCount {
+            font-size: 20px;
+            margin-top: 20px;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Hangman Game</h1>
+<div id="wordDisplay"></div>
+<img id="hangmanImage" src="hangman0.png" alt="Hangman Image">
+<form id="guessForm">
+    <input type="text" id="letterInput" maxlength="1" required>
+    <button type="submit">Guess</button>
+</form>
+<div id="message"></div>
+<div id="wrongLetters">Wrong Letters: </div>
+<div id="guessCount">Wrong Guess Count: 0</div>
+
+<script>
+    const words = ["javascript", "hangman", "programming", "developer", "frontend"];
+    let selectedWord = words[Math.floor(Math.random() * words.length)];
+    let guessedLetters = [];
+    let wrongGuesses = 0;
+
+    function updateWordDisplay() {
+        let display = selectedWord.split('').map(letter => 
+            guessedLetters.includes(letter) ? letter : "_"
+        ).join(' ');
+        document.getElementById("wordDisplay").innerText = display;
+
+        if (!display.includes("_")) {
+            document.getElementById("message").innerText = "Congratulations! You guessed the word!";
+            document.getElementById("guessForm").style.display = "none";
+        }
+    }
+
+    function updateHangmanImage() {
+        const hangmanImage = document.getElementById("hangmanImage");
+        hangmanImage.src = `hangman${wrongGuesses}.png`; // Ensure these images are in the same directory
+        document.getElementById("guessCount").innerText = `Wrong Guess Count: ${wrongGuesses}`;
+        if (wrongGuesses >= 6) {
+            document.getElementById("message").innerText = "Game Over! The word was: " + selectedWord;
+            document.getElementById("guessForm").style.display = "none";
+        }
+    }
+
+    function updateWrongLetters() {
+        const wrongLetters = guessedLetters.filter(letter => !selectedWord.includes(letter));
+        document.getElementById("wrongLetters").innerText = "Wrong Letters: " + wrongLetters.join(', ');
+    }
+
+    document.getElementById("guessForm").addEventListener("submit", function(event) {
+        event.preventDefault(); // Prevent the default form submission
+        const letterInput = document.getElementById("letterInput");
+        const letter = letterInput.value.toLowerCase();
+        letterInput.value = '';
+
+        if (guessedLetters.includes(letter) || letter.length !== 1) {
+            return; // Ignore if letter already guessed or invalid input
+        }
+
+        guessedLetters.push(letter);
+        if (!selectedWord.includes(letter)) {
+            wrongGuesses++;
+            updateHangmanImage();
+        }
+        updateWordDisplay();
+        updateWrongLetters();
+    });
+
+    updateWordDisplay(); // Initial display
+</script>
+
+</body>
+</html>
