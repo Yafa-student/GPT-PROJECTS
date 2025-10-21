@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🍳 Kids Kitchen - Login 👨🍳</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Animation Screen -->
+    <div id="animationScreen" class="animation-screen">
+        <div class="chef-animation">
+            <div class="chef-hat">👨🍳</div>
+            <div class="cooking-items">
+                <span class="item item1">🍳</span>
+                <span class="item item2">🥞</span>
+                <span class="item item3">🍕</span>
+                <span class="item item4">🍪</span>
+            </div>
+            <h1 class="welcome-text">Welcome to Kids Kitchen!</h1>
+        </div>
+    </div>
+
+    <!-- Login Container -->
+    <div id="loginContainer" class="login-container" style="display: none;">
+        <div class="login-box">
+            <h1>🍳 Welcome to Kids Kitchen! 👨🍳</h1>
+            <p>Login to start cooking!</p>
+            
+            <form id="loginForm">
+                <div class="input-group">
+                    <label for="username">👤 Username:</label>
+                    <input type="text" id="username" name="username" required minlength="3" maxlength="20">
+                    <span class="error" id="usernameError"></span>
+                </div>
+                
+                <div class="input-group">
+                    <label for="password">🔒 Password:</label>
+                    <input type="password" id="password" name="password" required minlength="4">
+                    <span class="error" id="passwordError"></span>
+                </div>
+                
+                <button type="submit" class="login-btn">Let's Cook! 🚀</button>
+                <button type="button" class="register-btn" onclick="showRegister()">New Chef? Sign Up! 👨‍🍳</button>
+            </form>
+            
+            <!-- Registration Form -->
+            <form id="registerForm" style="display: none;">
+                <h2>🆕 Create New Chef Account</h2>
+                <div class="input-group">
+                    <label for="newUsername">👤 Choose Username:</label>
+                    <input type="text" id="newUsername" name="newUsername" required minlength="3" maxlength="20" pattern="[a-zA-Z]+">
+                    <span class="error" id="newUsernameError"></span>
+                    <small>3-20 characters, letters only</small>
+                </div>
+                
+                <div class="input-group">
+                    <label for="newPassword">🔒 Choose Password:</label>
+                    <input type="password" id="newPassword" name="newPassword" required minlength="4" maxlength="50">
+                    <span class="error" id="newPasswordError"></span>
+                    <small>At least 4 characters</small>
+                </div>
+                
+                <button type="submit" class="login-btn">Create Account! 🎉</button>
+                <button type="button" class="register-btn" onclick="showLogin()">Back to Login 🔙</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Initialize default user if no users exist
+        if (!localStorage.getItem('kidsKitchenUsers')) {
+            const defaultUsers = {
+                'chef': 'cook123'
+            };
+            localStorage.setItem('kidsKitchenUsers', JSON.stringify(defaultUsers));
+        }
+
+        // Login form
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            clearErrors();
+            
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            
+            if (!validateLogin(username, password)) return;
+            
+            const users = JSON.parse(localStorage.getItem('kidsKitchenUsers'));
+            
+            if (users[username] && users[username] === password) {
+                localStorage.setItem('currentUser', username);
+                showNotification('🎉 Welcome, ' + username + '! Let\'s start cooking!', 'success');
+                showLoginSuccess(username);
+            } else {
+                showError('passwordError', 'Invalid username or password!');
+            }
+        });
+
+        // Registration form
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            clearErrors();
+            
+            const username = document.getElementById('newUsername').value.trim();
+            const password = document.getElementById('newPassword').value;
+            
+            if (!validateRegistration(username, password)) return;
+            
+            const users = JSON.parse(localStorage.getItem('kidsKitchenUsers'));
+            
+            if (users[username]) {
+                showError('newUsernameError', 'Username already exists!');
+                return;
+            }
+            
+            users[username] = password;
+            localStorage.setItem('kidsKitchenUsers', JSON.stringify(users));
+            localStorage.setItem('currentUser', username);
+            
+            showNotification('🎉 Welcome to Kids Kitchen, ' + username + '! Account created!', 'success');
+            showLoginSuccess(username);
+        });
+
+        function showRegister() {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('registerForm').style.display = 'block';
+        }
+
+        function showLogin() {
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('registerForm').style.display = 'none';
+            clearErrors();
+        }
+
+        function validateLogin(username, password) {
+            let valid = true;
+            
+            if (username.length < 3) {
+                showError('usernameError', 'Username must be at least 3 characters');
+                valid = false;
+            }
+            
+            if (password.length < 4) {
+                showError('passwordError', 'Password must be at least 4 characters');
+                valid = false;
+            }
+            
+            return valid;
+        }
+
+        function validateRegistration(username, password) {
+            let valid = true;
+            
+            if (username.length < 3 || username.length > 20) {
+                showError('newUsernameError', 'Username must be 3-20 characters');
+                valid = false;
+            }
+            
+            if (!/^[a-zA-Z]+$/.test(username)) {
+                showError('newUsernameError', 'Username can only contain letters');
+                valid = false;
+            }
+            
+            if (password.length < 4) {
+                showError('newPasswordError', 'Password must be at least 4 characters');
+                valid = false;
+            }
+            
+            return valid;
+        }
+
+        function showError(elementId, message) {
+            document.getElementById(elementId).textContent = message;
+        }
+
+        function clearErrors() {
+            const errors = document.querySelectorAll('.error');
+            errors.forEach(error => error.textContent = '');
+        }
+
+        // Animation on page load
+        window.onload = function() {
+            setTimeout(function() {
+                document.getElementById('animationScreen').style.display = 'none';
+                document.getElementById('loginContainer').style.display = 'flex';
+                document.getElementById('loginContainer').classList.add('jump-in');
+            }, 3000);
+        };
+        
+        // Success animation
+        function showLoginSuccess(username) {
+            const successDiv = document.createElement('div');
+            successDiv.className = 'login-success';
+            successDiv.innerHTML = `
+                <div class="success-content">
+                    <div class="success-chef">👨🍳</div>
+                    <h2>Welcome ${username}!</h2>
+                    <div class="cooking-animation">
+                        <span>🍳</span><span>🥞</span><span>🍕</span><span>🍪</span>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(successDiv);
+            
+            setTimeout(() => successDiv.classList.add('show'), 100);
+            setTimeout(() => window.location.href = 'index.html', 2000);
+        }
+        
+        // Notification system
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => notification.classList.add('show'), 100);
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => document.body.removeChild(notification), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🍳 Kids Kitchen - Feedback 👨🍳</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>🍳 Kids Kitchen 👨🍳</h1>
+        <p>Tell Us What You Think!</p>
+        <div class="user-info">
+            <span id="welcomeUser"></span>
+            <button onclick="goHome()" class="settings-btn">🏠 Home</button>
+            <button onclick="logout()" class="logout-btn">Logout 🚪</button>
+        </div>
+    </header>
+
+    <main>
+        <div class="feedback-container">
+            <h2>📝 Share Your Feedback</h2>
+            
+            <form id="feedbackForm">
+                <div class="input-group">
+                    <label for="rating">⭐ How much did you like cooking?</label>
+                    <div class="star-rating">
+                        <span class="star" onclick="setRating(1)">⭐</span>
+                        <span class="star" onclick="setRating(2)">⭐</span>
+                        <span class="star" onclick="setRating(3)">⭐</span>
+                        <span class="star" onclick="setRating(4)">⭐</span>
+                        <span class="star" onclick="setRating(5)">⭐</span>
+                    </div>
+                    <input type="hidden" id="rating" name="rating" required>
+                </div>
+                
+                <div class="input-group">
+                    <label for="recipe">🍳 Which recipe did you try?</label>
+                    <select id="recipe" name="recipe" required>
+                        <option value="">Choose a recipe...</option>
+                        <option value="sandwich">🥪 Super Easy Sandwich</option>
+                        <option value="salad">🌈 Rainbow Fruit Salad</option>
+                        <option value="smoothie">🥤 Banana Berry Smoothie</option>
+                        <option value="cookies">🍪 No-Bake Energy Balls</option>
+                        <option value="pancakes">🥞 Fluffy Pancakes</option>
+                        <option value="pizza">🍕 Mini Pizzas</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label for="comment">💭 Tell us about your cooking experience:</label>
+                    <textarea id="comment" name="comment" rows="4" placeholder="What did you like? What was fun? Any suggestions?"></textarea>
+                </div>
+                
+                <button type="submit" class="feedback-btn">Send Feedback! 🚀</button>
+            </form>
+        </div>
+
+        <div class="feedback-list">
+            <h2>👨🍳 What Other Young Chefs Say</h2>
+            <div id="feedbackDisplay"></div>
+        </div>
+    </main>
+
+    <script>
+        let selectedRating = 0;
+
+        window.onload = function() {
+            const currentUser = localStorage.getItem('currentUser');
+            if (!currentUser) {
+                window.location.href = 'login.html';
+            } else {
+                document.getElementById('welcomeUser').textContent = '👨🍳 Welcome, ' + currentUser + '!';
+                loadFeedback();
+            }
+        };
+
+        function setRating(rating) {
+            selectedRating = rating;
+            document.getElementById('rating').value = rating;
+            
+            const stars = document.querySelectorAll('.star');
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.style.color = '#f39c12';
+                    star.style.transform = 'scale(1.2)';
+                } else {
+                    star.style.color = '#bdc3c7';
+                    star.style.transform = 'scale(1)';
+                }
+            });
+        }
+
+        document.getElementById('feedbackForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const rating = document.getElementById('rating').value;
+            const recipe = document.getElementById('recipe').value;
+            const comment = document.getElementById('comment').value;
+            const user = localStorage.getItem('currentUser');
+            
+            if (!rating) {
+                showNotification('Please select a star rating!', 'warning');
+                return;
+            }
+            
+            const feedback = {
+                user: user,
+                rating: rating,
+                recipe: recipe,
+                comment: comment,
+                date: new Date().toLocaleDateString()
+            };
+            
+            let feedbacks = JSON.parse(localStorage.getItem('kidsFeedback') || '[]');
+            feedbacks.unshift(feedback);
+            localStorage.setItem('kidsFeedback', JSON.stringify(feedbacks));
+            
+            showNotification('🎉 Thank you for your feedback!', 'success');
+            document.getElementById('feedbackForm').reset();
+            setRating(0);
+            loadFeedback();
+        });
+
+        function loadFeedback() {
+            const feedbacks = JSON.parse(localStorage.getItem('kidsFeedback') || '[]');
+            const display = document.getElementById('feedbackDisplay');
+            
+            if (feedbacks.length === 0) {
+                display.innerHTML = '<p class="no-feedback">No feedback yet. Be the first to share!</p>';
+                return;
+            }
+            
+            display.innerHTML = feedbacks.slice(0, 10).map(feedback => `
+                <div class="feedback-card">
+                    <div class="feedback-header">
+                        <span class="feedback-user">👨🍳 ${feedback.user}</span>
+                        <span class="feedback-rating">${'⭐'.repeat(feedback.rating)}</span>
+                        <span class="feedback-date">${feedback.date}</span>
+                    </div>
+                    <div class="feedback-recipe">Recipe: ${feedback.recipe}</div>
+                    ${feedback.comment ? `<div class="feedback-comment">"${feedback.comment}"</div>` : ''}
+                </div>
+            `).join('');
+        }
+
+        function goHome() {
+            window.location.href = 'index.html';
+        }
+
+        function logout() {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'login.html';
+        }
+        
+        // Notification system
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => notification.classList.add('show'), 100);
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => document.body.removeChild(notification), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
