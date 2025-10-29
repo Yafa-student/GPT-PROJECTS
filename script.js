@@ -409,9 +409,12 @@ function showRecipe(recipeKey) {
 }
 
 function closeModal() {
-    if (typeof stopReading === 'function') {
-        stopReading(); // Stop reading when closing modal
-    }
+    // Fully stop any speech when closing the modal so state is reset
+    try { speechSynthesis.cancel(); } catch (e) {}
+    isReading = false;
+    isPaused = false;
+    currentReadingIndex = 0;
+    stepByStepMode = false;
     document.getElementById('recipeModal').style.display = 'none';
 }
 
@@ -419,9 +422,11 @@ function closeModal() {
 window.onclick = function(event) {
     const modal = document.getElementById('recipeModal');
     if (event.target === modal) {
-        if (typeof stopReading === 'function') {
-            stopReading(); // Stop reading when closing modal
-        }
+        try { speechSynthesis.cancel(); } catch (e) {}
+        isReading = false;
+        isPaused = false;
+        currentReadingIndex = 0;
+        stepByStepMode = false;
         modal.style.display = 'none';
     }
 }
@@ -433,40 +438,59 @@ let currentReadingIndex = 0;
 let readingElements = [];
 let stepByStepMode = false;
 let fullscreenMode = false;
+let isPaused = false; // new: tracks user-initiated pause so we can resume
 
 // Speech functions
 function readRecipe() {
+    // If currently paused, resume instead of starting over
+    if (isPaused) {
+        try { speechSynthesis.resume(); } catch (e) {}
+        isPaused = false;
+        isReading = true;
+        document.getElementById('readRecipeBtn').style.display = 'none';
+        document.getElementById('stopReadingBtn').style.display = 'inline-block';
+        return;
+    }
+
+    // If already actively reading (not paused), treat as a request to stop
     if (isReading) {
         stopReading();
         return;
     }
-    
+
     const recipeContent = document.getElementById('recipeContent');
     const textToRead = recipeContent.innerText;
-    
+
     speak(textToRead);
-    
+
     document.getElementById('readRecipeBtn').style.display = 'none';
     document.getElementById('stopReadingBtn').style.display = 'inline-block';
 }
 
 function stopReading() {
-    if (speechSynthesis.speaking) {
-        speechSynthesis.cancel();
+    // First attempt to pause so user can resume later
+    if (speechSynthesis.speaking && !speechSynthesis.paused) {
+        try { speechSynthesis.pause(); } catch (e) {}
+        isPaused = true;
+        isReading = true; // ensure we remain in reading state so resume works
+        // keep isReading true so step-by-step logic can resume
+    } else {
+        // If not currently speaking (or already paused), fully cancel and reset
+        try { speechSynthesis.cancel(); } catch (e) {}
+        isPaused = false;
+        isReading = false;
+        currentReadingIndex = 0;
+        stepByStepMode = false;
+
+        // Reset visual effects
+        document.querySelectorAll('.reading-current, .reading-completed').forEach(el => {
+            el.classList.remove('reading-current', 'reading-completed');
+        });
     }
-    
-    isReading = false;
-    currentReadingIndex = 0;
-    stepByStepMode = false;
-    
-    // Reset visual effects
-    document.querySelectorAll('.reading-current, .reading-completed').forEach(el => {
-        el.classList.remove('reading-current', 'reading-completed');
-    });
-    
+
     document.getElementById('readRecipeBtn').style.display = 'inline-block';
     document.getElementById('stopReadingBtn').style.display = 'none';
-    
+
     if (fullscreenMode) {
         document.getElementById('currentLineDisplay').innerHTML = '<p>Click "Start Reading" to begin...</p>';
         document.getElementById('pauseBtn').style.display = 'none';
@@ -630,7 +654,13 @@ function startFullscreenReading() {
 
 function pauseFullscreenReading() {
     if (speechSynthesis.speaking) {
-        speechSynthesis.pause();
+        if (speechSynthesis.paused) {
+            speechSynthesis.resume();
+            document.getElementById('pauseBtn').textContent = '⏸️ Pause';
+        } else {
+            speechSynthesis.pause();
+            document.getElementById('pauseBtn').textContent = '▶️ Resume';
+        }
     }
 }
 
