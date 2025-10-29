@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🍳 מטבח ילדים - כניסה 👨🍳</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Animation Screen -->
+    <div id="animationScreen" class="animation-screen">
+        <div class="chef-animation">
+            <div class="chef-hat">👨🍳</div>
+            <div class="cooking-items">
+                <span class="item item1">🍳</span>
+                <span class="item item2">🥞</span>
+                <span class="item item3">🍕</span>
+                <span class="item item4">🍪</span>
+            </div>
+            <h1 class="welcome-text">ברוכים הבאים למטבח ילדים!</h1>
+        </div>
+    </div>
+
+    <!-- Login Container -->
+    <div id="loginContainer" class="login-container" style="display: none;">
+        <div class="login-box">
+            <h1>🍳 ברוכים הבאים למטבח ילדים! 👨🍳</h1>
+            <p>התחברו כדי להתחיל לבשל!</p>
+            
+            <form id="loginForm">
+                <div class="input-group">
+                    <label for="username">👤 שם משתמש:</label>
+                    <input type="text" id="username" name="username" required minlength="3" maxlength="20">
+                    <span class="error" id="usernameError"></span>
+                </div>
+                
+                <div class="input-group">
+                    <label for="password">🔒 סיסמה:</label>
+                    <input type="password" id="password" name="password" required minlength="4">
+                    <span class="error" id="passwordError"></span>
+                </div>
+                
+                <button type="submit" class="login-btn">בואו נבשל! 🚀</button>
+                <button type="button" class="register-btn" onclick="showRegister()">שף חדש? הירשמו! 👨🍳</button>
+            </form>
+            
+            <!-- Registration Form -->
+            <form id="registerForm" style="display: none;">
+                <h2>🆕 צרו חשבון שף חדש</h2>
+                <div class="input-group">
+                    <label for="newUsername">👤 בחרו שם משתמש:</label>
+                    <input type="text" id="newUsername" name="newUsername" required minlength="3" maxlength="20" pattern="[a-zA-Z\u0590-\u05FF]+">
+                    <span class="error" id="newUsernameError"></span>
+                    <small>3-20 תווים, אותיות עברית או אנגלית בלבד</small>
+                </div>
+                
+                <div class="input-group">
+                    <label for="newPassword">🔒 בחרו סיסמה:</label>
+                    <input type="password" id="newPassword" name="newPassword" required minlength="4" maxlength="50">
+                    <span class="error" id="newPasswordError"></span>
+                    <small>לפחות 4 תווים</small>
+                </div>
+                
+                <button type="submit" class="login-btn">צרו חשבון! 🎉</button>
+                <button type="button" class="register-btn" onclick="showLogin()">חזרה להתחברות 🔙</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Initialize default user if no users exist
+        if (!localStorage.getItem('kidsKitchenUsers')) {
+            const defaultUsers = {
+                'שף': 'cook123'
+            };
+            localStorage.setItem('kidsKitchenUsers', JSON.stringify(defaultUsers));
+        }
+
+        // Login form
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            clearErrors();
+            
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            
+            if (!validateLogin(username, password)) return;
+            
+            const users = JSON.parse(localStorage.getItem('kidsKitchenUsers'));
+            
+            if (users[username] && users[username] === password) {
+                localStorage.setItem('currentUser', username);
+                alert('🎉 ברוך הבא, ' + username + '! בואו נתחיל לבשל!');
+                window.location.href = 'index_hebrew.html';
+            } else {
+                showError('passwordError', 'שם משתמש או סיסמה שגויים!');
+            }
+        });
+
+        // Registration form
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            clearErrors();
+            
+            const username = document.getElementById('newUsername').value.trim();
+            const password = document.getElementById('newPassword').value;
+            
+            if (!validateRegistration(username, password)) return;
+            
+            const users = JSON.parse(localStorage.getItem('kidsKitchenUsers'));
+            
+            if (users[username]) {
+                showError('newUsernameError', 'שם המשתמש כבר קיים!');
+                return;
+            }
+            
+            users[username] = password;
+            localStorage.setItem('kidsKitchenUsers', JSON.stringify(users));
+            localStorage.setItem('currentUser', username);
+            
+            alert('🎉 ברוכים הבאים למטבח ילדים, ' + username + '! החשבון נוצר!');
+            window.location.href = 'index_hebrew.html';
+        });
+
+        function showRegister() {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('registerForm').style.display = 'block';
+        }
+
+        function showLogin() {
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('registerForm').style.display = 'none';
+            clearErrors();
+        }
+
+        function validateLogin(username, password) {
+            let valid = true;
+            
+            if (username.length < 3) {
+                showError('usernameError', 'שם המשתמש חייב להיות לפחות 3 תווים');
+                valid = false;
+            }
+            
+            if (password.length < 4) {
+                showError('passwordError', 'הסיסמה חייבת להיות לפחות 4 תווים');
+                valid = false;
+            }
+            
+            return valid;
+        }
+
+        function validateRegistration(username, password) {
+            let valid = true;
+            
+            if (username.length < 3 || username.length > 20) {
+                showError('newUsernameError', 'שם המשתמש חייב להיות 3-20 תווים');
+                valid = false;
+            }
+            
+            if (!/^[a-zA-Z\u0590-\u05FF]+$/.test(username)) {
+                showError('newUsernameError', 'שם המשתמש יכול להכיל רק אותיות עברית או אנגלית');
+                valid = false;
+            }
+            
+            if (password.length < 4) {
+                showError('newPasswordError', 'הסיסמה חייבת להיות לפחות 4 תווים');
+                valid = false;
+            }
+            
+            return valid;
+        }
+
+        function showError(elementId, message) {
+            document.getElementById(elementId).textContent = message;
+        }
+
+        function clearErrors() {
+            const errors = document.querySelectorAll('.error');
+            errors.forEach(error => error.textContent = '');
+        }
+
+        // Animation on page load
+        window.onload = function() {
+            setTimeout(function() {
+                document.getElementById('animationScreen').style.display = 'none';
+                document.getElementById('loginContainer').style.display = 'flex';
+                document.getElementById('loginContainer').classList.add('jump-in');
+            }, 3000);
+        };
+    </script>
+</body>
+</html>

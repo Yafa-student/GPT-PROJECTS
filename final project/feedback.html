@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🍳 Kids Kitchen - Feedback 👨🍳</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="feedback.js" defer></script>
+    <style>
+        .autocomplete-container {
+            position: relative;
+            width: 100%;
+        }
+        .suggestions-list {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+        }
+        .suggestion-item {
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 1px solid #eee;
+        }
+        .suggestion-item:hover {
+            background-color: #f0f0f0;
+        }
+        .suggestion-item:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🍳 Kids Kitchen 👨🍳</h1>
+        <p>Tell Us What You Think!</p>
+        <div class="user-info">
+            <span id="welcomeUser"></span>
+            <button onclick="goHome()" class="settings-btn">🏠 Home</button>
+            <button onclick="logout()" class="logout-btn">Logout 🚪</button>
+        </div>
+    </header>
+
+    <main>
+        <div class="feedback-container">
+            <h2>📝 Share Your Feedback</h2>
+            
+            <form id="feedbackForm">
+                <div class="input-group">
+                    <label for="rating">⭐ How much did you like the recipe?</label>
+                    <div class="star-rating">
+                        <span class="star" onclick="setRating(1)">⭐</span>
+                        <span class="star" onclick="setRating(2)">⭐</span>
+                        <span class="star" onclick="setRating(3)">⭐</span>
+                        <span class="star" onclick="setRating(4)">⭐</span>
+                        <span class="star" onclick="setRating(5)">⭐</span>
+                    </div>
+                    <input type="hidden" id="rating" name="rating" required>
+                </div>
+                
+                <div class="input-group">
+                    <label for="recipe">🍳 Which recipe did you try?</label>
+                    <div class="autocomplete-container">
+                        <input type="text" id="recipeInput" placeholder="🔍 Click here to search recipe..." oninput="showSuggestions()" onblur="hideSuggestions()" onclick="showSuggestions()">
+                        <div id="suggestions" class="suggestions-list"></div>
+                    </div>
+                    <input type="hidden" id="recipe" name="recipe" required>
+
+
+                </div>
+                
+                <div class="input-group">
+                    <label for="comment">💭 Tell us about your cooking experience:</label>
+                    <textarea id="comment" name="comment" rows="4" placeholder="What did you like? What was fun? Any suggestions?"></textarea>
+                </div>
+                
+                <button type="submit" class="feedback-btn">Send Feedback! 🚀</button>
+            </form>
+        </div>
+
+        <div class="feedback-list">
+            <h2>👨🍳 What Other Young Chefs Say</h2>
+            <div id="feedbackDisplay"></div>
+        </div>
+    </main>
+
+
+</body>
+</html>
