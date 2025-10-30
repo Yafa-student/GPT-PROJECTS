@@ -1158,7 +1158,7 @@ header p {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 50%, #fd79a8 100%);
     z-index: 10000;
     overflow: hidden;
     font-family: 'Comic Sans MS', cursive, sans-serif;
@@ -1173,24 +1173,25 @@ header p {
 }
 
 .fullscreen-header {
-    background: rgba(0, 0, 0, 0.3);
-    padding: 1rem 2rem;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 2rem 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
+    border-bottom: 5px solid #ff6b6b;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    min-height: 120px;
 }
 
 .fullscreen-header h1 {
-    font-size: 2.5rem;
+    font-size: 2.8rem;
     margin: 0;
-    background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1);
-    background-size: 200% 200%;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    animation: textGradient 3s ease infinite;
+    color: #ff6b6b;
+    font-weight: bold;
+    line-height: 1.2;
+    padding: 0.5rem 0;
+    text-shadow: 3px 3px 0px #4ecdc4, 6px 6px 0px #45b7d1;
+    transform: rotate(-2deg);
 }
 
 .exit-fullscreen {

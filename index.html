@@ -74,6 +74,7 @@
             <div class="speech-controls">
                 <button id="readRecipeBtn" class="speech-btn" onclick="readRecipe()">🔊 Read Recipe</button>
                 <button id="stopReadingBtn" class="speech-btn" onclick="stopReading()" style="display: none;">⏹️ Stop Reading</button>
+                <button id="continueReadingBtn" class="speech-btn" onclick="continueReading()" style="display: none;">▶️ Continue</button>
                 <div class="dropdown-controls" style="display: none;" id="dropdownControls">
                     <button class="speech-btn" onclick="readStepByStep()">📝 Read Step by Step</button>
                     <button class="speech-btn" onclick="readIngredients()">🛒 Read Ingredients Only</button>
@@ -185,6 +186,22 @@
                 document.getElementById('welcomeUser').textContent = '👨🍳 Welcome, ' + currentUser + '!';
             }
         };
+
+        // Handle spacebar for pause/resume
+        document.addEventListener('keydown', function(event) {
+            if (event.code === 'Space' && document.getElementById('recipeModal').style.display === 'block') {
+                event.preventDefault();
+                
+                if (isPaused) {
+                    continueReading();
+                } else if (isReading) {
+                    stopReading();
+                } else {
+                    // If not reading at all, start step-by-step reading
+                    readStepByStep();
+                }
+            }
+        });
 
         function logout() {
             localStorage.removeItem('currentUser');
