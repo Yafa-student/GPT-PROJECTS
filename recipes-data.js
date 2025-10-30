@@ -129,18 +129,64 @@ function generateRecipeCards(ageGroup) {
         
         // Only show recipes for selected age group
         if (recipe.age === ageGroup) {
-            let imageUrl;
-            if (key === 'cereal') {
-                imageUrl = 'https://images.unsplash.com/photo-1574168945971-78d2d8bd2c73?w=300&h=200&fit=crop&crop=center';
-            } else if (key === 'apple') {
-                imageUrl = 'https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?w=300&h=200&fit=crop&crop=center';
-            } else {
-                imageUrl = `https://via.placeholder.com/300x200/${getRandomColor()}/ffffff?text=${encodeURIComponent(recipe.title.split(' ')[0])}`;
-            }
+            const recipeImages = {
+                // Beginner recipes
+                'smoothie': 'https://images.unsplash.com/photo-1553530666-ba11a7da3888?w=300&h=200&fit=crop&crop=center',
+                'apple': 'https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?w=300&h=200&fit=crop&crop=center',
+                'butter': 'https://images.unsplash.com/photo-1589985270826-4b7bb135bc9d?w=300&h=200&fit=crop&crop=center',
+                'crackers': 'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=300&h=200&fit=crop&crop=center',
+                'banana': 'https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=300&h=200&fit=crop&crop=center',
+                'yogurt': 'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=300&h=200&fit=crop&crop=center',
+                'trail': 'https://images.unsplash.com/photo-1599599810769-bcde5a160d32?w=300&h=200&fit=crop&crop=center',
+                'juice': 'https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=300&h=200&fit=crop&crop=center',
+                'celery': 'https://images.unsplash.com/photo-1553621042-f6e147245754?w=300&h=200&fit=crop&crop=center',
+                'grapes': 'https://images.unsplash.com/photo-1537640538966-79f369143f8f?w=300&h=200&fit=crop&crop=center',
+                'milk': 'https://images.unsplash.com/photo-1563636619-e9143da7973b?w=300&h=200&fit=crop&crop=center',
+                'berries': 'https://images.unsplash.com/photo-1498557850523-fd3d118b962e?w=300&h=200&fit=crop&crop=center',
+                'toast1': 'https://images.unsplash.com/photo-1586444248902-2f64eddc13df?w=300&h=200&fit=crop&crop=center',
+                'water': 'https://images.unsplash.com/photo-1544145945-f90425340c7e?w=300&h=200&fit=crop&crop=center',
+                'carrots': 'https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?w=300&h=200&fit=crop&crop=center',
+                'pretzel': 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=300&h=200&fit=crop&crop=center',
+                'cherry': 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=300&h=200&fit=crop&crop=center',
+                'cereal': 'https://images.unsplash.com/photo-1574168945971-78d2d8bd2c73?w=300&h=200&fit=crop&crop=center',
+                'toast2': 'https://images.unsplash.com/photo-1506084868230-bb9d95c24759?w=300&h=200&fit=crop&crop=center',
+                'fruit': 'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?w=300&h=200&fit=crop&crop=center',
+                'pudding': 'https://images.unsplash.com/photo-1551024506-0bccd828d307?w=300&h=200&fit=crop&crop=center',
+                'goldfish': 'https://images.unsplash.com/photo-1599599810769-bcde5a160d32?w=300&h=200&fit=crop&crop=center',
+                'raisins': 'https://images.unsplash.com/photo-1587132137056-bfbf0166836e?w=300&h=200&fit=crop&crop=center',
+                'string': 'https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?w=300&h=200&fit=crop&crop=center',
+                'graham': 'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=300&h=200&fit=crop&crop=center',
+                'popsicle': 'https://images.unsplash.com/photo-1564093497595-593b96d80180?w=300&h=200&fit=crop&crop=center',
+                'animal': 'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=300&h=200&fit=crop&crop=center',
+                'applesauce': 'https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=300&h=200&fit=crop&crop=center',
+                // Intermediate recipes
+                'sandwich': 'https://images.unsplash.com/photo-1539252554453-80ab65ce3586?w=300&h=200&fit=crop&crop=center',
+                'salad': 'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=300&h=200&fit=crop&crop=center',
+                'cookies': 'https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=300&h=200&fit=crop&crop=center',
+                'pizza': 'https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=300&h=200&fit=crop&crop=center',
+                'pasta': 'https://images.unsplash.com/photo-1621996346565-e3dbc353d2e5?w=300&h=200&fit=crop&crop=center',
+                'wrap': 'https://images.unsplash.com/photo-1565299585323-38174c4a6471?w=300&h=200&fit=crop&crop=center',
+                'quesadilla': 'https://images.unsplash.com/photo-1618040996337-56904b7850b9?w=300&h=200&fit=crop&crop=center',
+                'soup': 'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=300&h=200&fit=crop&crop=center',
+                'eggs': 'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?w=300&h=200&fit=crop&crop=center',
+                'grilled': 'https://images.unsplash.com/photo-1528736235302-52922df5c122?w=300&h=200&fit=crop&crop=center',
+                'mac': 'https://images.unsplash.com/photo-1621996346565-e3dbc353d2e5?w=300&h=200&fit=crop&crop=center',
+                // Advanced recipes
+                'pancakes': 'https://images.unsplash.com/photo-1506084868230-bb9d95c24759?w=300&h=200&fit=crop&crop=center',
+                'muffins': 'https://images.unsplash.com/photo-1607958996333-41aef7caefaa?w=300&h=200&fit=crop&crop=center',
+                'toast': 'https://images.unsplash.com/photo-1484723091739-30a097e8f929?w=300&h=200&fit=crop&crop=center',
+                'cookies2': 'https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=300&h=200&fit=crop&crop=center',
+                'cake': 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=300&h=200&fit=crop&crop=center',
+                'bread': 'https://images.unsplash.com/photo-1549931319-a545dcf3bc73?w=300&h=200&fit=crop&crop=center',
+                'chicken': 'https://images.unsplash.com/photo-1598103442097-8b74394b95c6?w=300&h=200&fit=crop&crop=center',
+                'waffles': 'https://images.unsplash.com/photo-1562376552-0d160dcec92d?w=300&h=200&fit=crop&crop=center'
+            };
+            
+            const imageUrl = recipeImages[key] || `https://via.placeholder.com/300x200/${getRandomColor()}/ffffff?text=${encodeURIComponent(recipe.title.split(' ')[0])}`;
             
             const card = `
                 <div class="recipe-card">
-                    <img src="${imageUrl}" alt="${recipe.title}">
+                    <img src="${imageUrl}" alt="${recipe.title}" style="object-fit: cover; width: 100%; height: 200px;">
                     <h3>${recipe.title}</h3>
                     <p>⏰ ${recipe.time} | 👶 Ages 4-6</p>
                     <button onclick="showRecipe('${key}')">Let's Cook!</button>
