@@ -45,7 +45,7 @@ const allRecipes = {
     salad: { title: "🌈 Rainbow Fruit Salad", time: "12 min", age: "intermediate", category: "Healthy", ingredients: ["apple", "banana", "strawberries", "blueberries", "orange"] },
     cookies: { title: "🍪 No-Bake Energy Balls", time: "15 min", age: "intermediate", category: "Desserts", ingredients: ["oats", "peanut butter", "honey", "chocolate chips"] },
     pizza: { title: "🍕 Mini Pizzas", time: "15 min", age: "intermediate", category: "Lunch", ingredients: ["muffins", "pizza sauce", "cheese", "pepperoni"] },
-    pasta: { title: "🍝 Cheesy Pasta", time: "12 min", age: "intermediate", category: "Dinner", ingredients: ["pasta", "cheese", "butter", "milk"] },
+    pasta: { title: "🍝 Cheesy Pasta", time: "15 min", age: "advanced", category: "Dinner", ingredients: ["pasta", "cheese", "butter", "milk"], image: "https://images.unsplash.com/photo-1621996346565-e3dbc353d2e5?w=300&h=200&fit=crop" },
     wrap: { title: "🌯 Rainbow Veggie Wrap", time: "10 min", age: "intermediate", category: "Lunch", ingredients: ["tortilla", "cream cheese", "carrots", "cucumber", "lettuce"] },
     quesadilla: { title: "🌮 Cheese Quesadilla", time: "10 min", age: "intermediate", category: "Lunch" },
     soup: { title: "🍲 Easy Tomato Soup", time: "15 min", age: "intermediate", category: "Dinner" },
@@ -131,7 +131,7 @@ function generateRecipeCards(ageGroup) {
         if (recipe.age === ageGroup) {
             const card = `
                 <div class="recipe-card">
-                    <img src="https://via.placeholder.com/300x200/${getRandomColor()}/ffffff?text=${encodeURIComponent(recipe.title.split(' ')[0])}" alt="${recipe.title}">
+                    <img src="${recipe.image || `https://via.placeholder.com/300x200/${getRandomColor()}/ffffff?text=${encodeURIComponent(recipe.title.split(' ')[0])}`}" alt="${recipe.title}">
                     <h3>${recipe.title}</h3>
                     <p>⏰ ${recipe.time} | 🍳 ${recipe.category}</p>
                     <button onclick="showRecipe('${key}')">Let's Cook!</button>

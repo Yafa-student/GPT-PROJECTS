@@ -45,7 +45,7 @@ const recipesByAge = {
     },
     advanced: {
         muffins: { title: "Banana Muffins", time: "30 min", age: "Ages 10+", image: "https://images.unsplash.com/photo-1486427944299-d1955d23e34d?w=300&h=200&fit=crop", ingredients: ["2 bananas 🍌", "Butter 🧈", "Sugar", "1 egg 🥚", "Flour 🌾"], steps: ["Wash hands! 🧼", "Preheat oven 350°F", "Mash bananas", "Mix all ingredients", "Fill muffin cups", "Bake 20-25 min", "Cool completely", "Enjoy! 🎉"] },
-        pasta: { title: "Cheesy Pasta", time: "15 min", age: "Ages 10+", image: "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?w=300&h=200&fit=crop", ingredients: ["Pasta 🍝", "Cheese 🧀", "Butter 🧈", "Milk 🥛"], steps: ["Wash hands! 🧼", "Boil water safely", "Cook pasta", "Drain carefully", "Add cheese, butter, milk", "Stir until creamy", "Serve hot! 🎉"] },
+        pasta: { title: "Cheesy Pasta", time: "15 min", age: "Ages 10+", image: "https://images.unsplash.com/photo-1621996346565-e3dbc353d2e5?w=300&h=200&fit=crop", ingredients: ["Pasta 🍝", "Cheese 🧀", "Butter 🧈", "Milk 🥛"], steps: ["Wash hands! 🧼", "Boil water safely", "Cook pasta", "Drain carefully", "Add cheese, butter, milk", "Stir until creamy", "Serve hot! 🎉"] },
         cookies: { title: "No-Bake Cookies", time: "20 min", age: "Ages 10+", image: "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=300&h=200&fit=crop", ingredients: ["Oats 🌾", "Peanut butter 🥜", "Honey 🍯", "Chocolate chips 🍫"], steps: ["Wash hands! 🧼", "Mix all ingredients", "Stir well", "Chill 30 minutes", "Roll into balls", "Refrigerate until firm", "Enjoy! 🎉"] },
         stir_fry: { title: "Veggie Stir Fry", time: "20 min", age: "Ages 10+", image: "https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=300&h=200&fit=crop", ingredients: ["Mixed vegetables 🥘", "Oil", "Soy sauce", "Rice 🍚", "Garlic"], steps: ["Wash hands and veggies! 🧼", "Cook rice first", "Heat oil in pan", "Add garlic", "Stir fry vegetables", "Add soy sauce", "Serve over rice! 🎉"] },
         waffles: { title: "Homemade Waffles", time: "25 min", age: "Ages 10+", image: "https://images.unsplash.com/photo-1541288097308-7b8e3f58c4c6?w=300&h=200&fit=crop", ingredients: ["Flour 🌾", "Baking powder", "Sugar", "Salt", "Milk 🥛", "Eggs 🥚"], steps: ["Wash hands! 🧼", "Mix dry ingredients", "Beat eggs and milk", "Combine wet and dry", "Heat waffle iron", "Pour batter", "Cook until golden", "Serve with syrup! 🎉"] },
@@ -251,8 +251,8 @@ const recipes = {
     },
     pasta: {
         title: "🍝 Cheesy Pasta",
-        time: "12 minutes",
-        age: "Ages 7+",
+        time: "15 minutes",
+        age: "Ages 10+",
         image: "https://images.unsplash.com/photo-1621996346565-e3dbc353d2e5?w=300&h=200&fit=crop",
         ingredients: [
             "2 cups pasta 🍝",
@@ -815,7 +815,7 @@ function displayRecipes(recipesToShow) {
     const grid = document.getElementById('recipeGrid');
     grid.innerHTML = recipesToShow.map(recipe => `
         <div class="recipe-card">
-            ${recipe.image ? `<img src="${recipe.image}" alt="${recipe.title}" onerror="this.style.display='none'">` : ''}
+            <img src="${recipe.image || 'https://images.unsplash.com/photo-1621996346565-e3dbc353d2e5?w=300&h=200&fit=crop'}" alt="${recipe.title}" onerror="this.style.display='none'">
             <h3>${recipe.title}</h3>
             <p>⏰ ${recipe.time} | 👶 ${recipe.age}</p>
             <button onclick="showRecipe('${recipe.key}')">Let's Cook! 🍳</button>
