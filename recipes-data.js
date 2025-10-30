@@ -20,7 +20,7 @@ const allRecipes = {
     cherry: { title: "🍒 Cherry Tomatoes", time: "3 min", age: "beginner", category: "Snacks" },
     
     // MORE BEGINNER RECIPES
-    cereal: { title: "🥣 Cereal Bowl", time: "2 min", age: "beginner", category: "Breakfast", ingredients: ["cereal", "milk"] },
+    cereal: { title: "🥣 Fun Cereal Bowl", time: "2 min", age: "beginner", category: "Breakfast", ingredients: ["cereal", "milk", "banana"] },
     toast2: { title: "🍞 Jam Toast", time: "3 min", age: "beginner", category: "Breakfast", ingredients: ["bread", "jam", "butter"] },
     fruit: { title: "🍍 Fruit Kabobs", time: "8 min", age: "beginner", category: "Snacks", ingredients: ["grapes", "strawberries", "melon"] },
     pudding: { title: "🍮 Instant Pudding", time: "5 min", age: "beginner", category: "Desserts", ingredients: ["pudding mix", "milk"] },
@@ -129,11 +129,15 @@ function generateRecipeCards(ageGroup) {
         
         // Only show recipes for selected age group
         if (recipe.age === ageGroup) {
+            const imageUrl = key === 'cereal' ? 
+                'https://images.unsplash.com/photo-1574168945971-78d2d8bd2c73?w=300&h=200&fit=crop&crop=center' : 
+                `https://via.placeholder.com/300x200/${getRandomColor()}/ffffff?text=${encodeURIComponent(recipe.title.split(' ')[0])}`;
+            
             const card = `
                 <div class="recipe-card">
-                    <img src="https://via.placeholder.com/300x200/${getRandomColor()}/ffffff?text=${encodeURIComponent(recipe.title.split(' ')[0])}" alt="${recipe.title}">
+                    <img src="${imageUrl}" alt="${recipe.title}">
                     <h3>${recipe.title}</h3>
-                    <p>⏰ ${recipe.time} | 🍳 ${recipe.category}</p>
+                    <p>⏰ ${recipe.time} | 👶 Ages 4-6</p>
                     <button onclick="showRecipe('${key}')">Let's Cook!</button>
                 </div>
             `;
