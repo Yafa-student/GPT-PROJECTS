@@ -602,12 +602,18 @@ header p {
 }
 
 .user-info {
-    margin-top: 1rem;
+    margin-top: 1.5rem;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     flex-wrap: wrap;
     gap: 1rem;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
 }
 
 .user-info span {
@@ -617,21 +623,113 @@ header p {
 }
 
 .logout-btn {
-    background: linear-gradient(45deg, #e74c3c, #c0392b);
+    background: linear-gradient(135deg, 
+        #e74c3c 0%, 
+        #c0392b 30%, 
+        #e67e22 60%, 
+        #d35400 100%);
+    background-size: 300% 300%;
     color: white;
     border: none;
-    padding: 8px 16px;
-    border-radius: 15px;
-    font-size: 0.9rem;
-    font-weight: bold;
+    padding: 12px 20px;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: 900;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     font-family: inherit;
+    margin: 0.3rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 
+        0 8px 25px rgba(231, 76, 60, 0.4),
+        0 0 15px rgba(230, 126, 34, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    letter-spacing: 0.5px;
+    animation: logoutButtonGlow 4s ease-in-out infinite;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.logout-btn::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(
+        from 0deg,
+        transparent,
+        rgba(255, 255, 255, 0.3),
+        transparent
+    );
+    animation: logoutButtonRotate 3s linear infinite;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.logout-btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.5),
+        transparent
+    );
+    transition: left 0.6s;
+}
+
+.logout-btn:hover::before {
+    opacity: 1;
+}
+
+.logout-btn:hover::after {
+    left: 100%;
 }
 
 .logout-btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    transform: scale(1.1) translateY(-3px) rotate(-2deg);
+    background-position: 100% 0;
+    box-shadow: 
+        0 15px 35px rgba(231, 76, 60, 0.6),
+        0 8px 20px rgba(230, 126, 34, 0.4),
+        0 0 25px rgba(192, 57, 43, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    animation: logoutButtonHover 0.8s ease;
+    border: 2px solid rgba(255, 255, 255, 0.6);
+}
+
+@keyframes logoutButtonGlow {
+    0%, 100% { 
+        box-shadow: 
+            0 8px 25px rgba(231, 76, 60, 0.4),
+            0 0 15px rgba(230, 126, 34, 0.2),
+            inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    }
+    50% { 
+        box-shadow: 
+            0 10px 30px rgba(230, 126, 34, 0.5),
+            0 0 20px rgba(231, 76, 60, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    }
+}
+
+@keyframes logoutButtonRotate {
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes logoutButtonHover {
+    0% { transform: scale(1.1) translateY(-3px) rotate(-2deg); }
+    25% { transform: scale(1.13) translateY(-5px) rotate(1deg); }
+    50% { transform: scale(1.15) translateY(-6px) rotate(-3deg); }
+    75% { transform: scale(1.12) translateY(-4px) rotate(1deg); }
+    100% { transform: scale(1.1) translateY(-3px) rotate(-2deg); }
 }
 
 .error {
@@ -1094,22 +1192,113 @@ header p {
 }
 
 .settings-btn {
-    background: linear-gradient(45deg, #9b59b6, #8e44ad);
+    background: linear-gradient(135deg, 
+        #9b59b6 0%, 
+        #8e44ad 30%, 
+        #3498db 60%, 
+        #2980b9 100%);
+    background-size: 300% 300%;
     color: white;
     border: none;
-    padding: 8px 16px;
-    border-radius: 15px;
-    font-size: 0.9rem;
-    font-weight: bold;
+    padding: 12px 20px;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: 900;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     font-family: inherit;
-    margin-right: 0.5rem;
+    margin: 0.3rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 
+        0 8px 25px rgba(155, 89, 182, 0.4),
+        0 0 15px rgba(52, 152, 219, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    letter-spacing: 0.5px;
+    animation: headerButtonGlow 4s ease-in-out infinite;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.settings-btn::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(
+        from 0deg,
+        transparent,
+        rgba(255, 255, 255, 0.3),
+        transparent
+    );
+    animation: headerButtonRotate 3s linear infinite;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.settings-btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.5),
+        transparent
+    );
+    transition: left 0.6s;
+}
+
+.settings-btn:hover::before {
+    opacity: 1;
+}
+
+.settings-btn:hover::after {
+    left: 100%;
 }
 
 .settings-btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    transform: scale(1.1) translateY(-3px) rotate(2deg);
+    background-position: 100% 0;
+    box-shadow: 
+        0 15px 35px rgba(155, 89, 182, 0.6),
+        0 8px 20px rgba(52, 152, 219, 0.4),
+        0 0 25px rgba(142, 68, 173, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    animation: headerButtonHover 0.8s ease;
+    border: 2px solid rgba(255, 255, 255, 0.6);
+}
+
+@keyframes headerButtonGlow {
+    0%, 100% { 
+        box-shadow: 
+            0 8px 25px rgba(155, 89, 182, 0.4),
+            0 0 15px rgba(52, 152, 219, 0.2),
+            inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    }
+    50% { 
+        box-shadow: 
+            0 10px 30px rgba(52, 152, 219, 0.5),
+            0 0 20px rgba(155, 89, 182, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    }
+}
+
+@keyframes headerButtonRotate {
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes headerButtonHover {
+    0% { transform: scale(1.1) translateY(-3px) rotate(2deg); }
+    25% { transform: scale(1.13) translateY(-5px) rotate(-1deg); }
+    50% { transform: scale(1.15) translateY(-6px) rotate(3deg); }
+    75% { transform: scale(1.12) translateY(-4px) rotate(-1deg); }
+    100% { transform: scale(1.1) translateY(-3px) rotate(2deg); }
 }
 
 /* Settings Modal Styles */
