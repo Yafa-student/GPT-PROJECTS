@@ -129,9 +129,14 @@ function generateRecipeCards(ageGroup) {
         
         // Only show recipes for selected age group
         if (recipe.age === ageGroup) {
-            const imageUrl = key === 'cereal' ? 
-                'https://images.unsplash.com/photo-1574168945971-78d2d8bd2c73?w=300&h=200&fit=crop&crop=center' : 
-                `https://via.placeholder.com/300x200/${getRandomColor()}/ffffff?text=${encodeURIComponent(recipe.title.split(' ')[0])}`;
+            let imageUrl;
+            if (key === 'cereal') {
+                imageUrl = 'https://images.unsplash.com/photo-1574168945971-78d2d8bd2c73?w=300&h=200&fit=crop&crop=center';
+            } else if (key === 'apple') {
+                imageUrl = 'https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?w=300&h=200&fit=crop&crop=center';
+            } else {
+                imageUrl = `https://via.placeholder.com/300x200/${getRandomColor()}/ffffff?text=${encodeURIComponent(recipe.title.split(' ')[0])}`;
+            }
             
             const card = `
                 <div class="recipe-card">
